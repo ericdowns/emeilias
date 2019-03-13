@@ -1,0 +1,6 @@
+.gitignore
+.DS_Store
+themes/twentynineteen
+plugins
+uploads/smack_uci_uploads
+uploads/wpallimport
