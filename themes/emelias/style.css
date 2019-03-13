@@ -1,0 +1,548 @@
+/* @override http://dkoenigart.flywheelsites.com/wp-content/themes/emelias/style.css?ver=4.6.1
+http://temp-site.local/wp-content/themes/emelias/style.css?ver=4.9.8
+https://emelias.local/wp-content/themes/emelias/style.css?ver=5.0.3
+	https://emelias.local/wp-content/themes/emelias/style.css?ver=5.1 */
+/* @override http://emelias.flywheelsites.com/wp-content/themes/emelias/style.css?ver=4.6.1 */
+/*
+Theme Name: Emelia's Apothecary
+Theme URI: grainandmortar.com
+Author: Grain & Mortar
+Author URI: grainandmortar.com/
+Description: Emelia's Apothecary Custom Woocommerce Theme 
+Text Domain: emelias
+Tags:
+Version: 1.0
+*/
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html {
+	font-family: sans-serif;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+audio, 
+canvas, 
+progress, 
+video {
+	display: inline-block;
+	vertical-align: baseline;
+}
+
+audio:not([controls]) {
+	display: none;
+	height: 0;
+}
+
+[hidden], 
+template {
+	display: none;
+}
+
+a:active, 
+a:hover {
+	outline: 0;
+}
+
+abbr[title] {
+	border-bottom: 1px dotted;
+}
+
+b, 
+strong {
+	font-family: 'Futura Bold';
+}
+
+	mark {
+	color: #000;
+	background: #ff0;
+}
+
+small {
+	font-size: 80%;
+}
+
+sub, 
+sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+sup {
+	top: -.5em;
+}
+
+sub {
+	bottom: -.25em;
+}
+
+img {
+	border: 0;
+}
+
+svg:not(:root) {
+	overflow: hidden;
+}
+
+figure {
+	margin: 1em 40px;
+}
+
+hr {
+	box-sizing: content-box;
+	height: 0;
+}
+
+pre {
+	overflow: auto;
+}
+
+code, 
+kbd, 
+pre, 
+samp {
+	font-family: monospace, monospace;
+	font-size: 1em;
+}
+
+button, 
+input, 
+optgroup, 
+select, 
+textarea {
+	font: inherit;
+	margin: 0;
+	color: inherit;
+}
+
+button {
+	overflow: visible;
+}
+
+button, 
+select {
+	text-transform: none;
+}
+
+button, 
+html input[type='button'], 
+input[type='reset'], 
+input[type='submit'] {
+	cursor: pointer;
+	-webkit-appearance: button;
+}
+
+button[disabled], 
+html input[disabled] {
+	cursor: default;
+}
+
+button::-moz-focus-inner, 
+input::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
+
+input {
+	line-height: normal;
+}
+
+input[type='checkbox'], 
+input[type='radio'] {
+	box-sizing: border-box;
+	padding: 0;
+}
+
+input[type='number']::-webkit-inner-spin-button, 
+input[type='number']::-webkit-outer-spin-button {
+	height: auto;
+}
+
+input[type='search']::-webkit-search-cancel-button, 
+input[type='search']::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+
+legend {
+	padding: 0;
+	border: 0;
+}
+
+textarea {
+	overflow: auto;
+}
+
+optgroup {
+	font-weight: bold;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+td, 
+th {
+	padding: 0;
+}
+
+body {
+	font-family: 'Futura Regular',sans-serif;
+	font-size: 17px;
+	line-height: 1.6;
+	color: #384017;
+	font-weight: normal!important;
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+	clear: both;
+margin-bottom: .5em;
+margin-top: .5em;
+
+}
+
+
+h1 {
+	font-family: 'Bartender';
+	font-size: 50px;
+	font-weight: normal;
+	line-height: 1;
+	margin-top: 0;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	color: #384017;
+	
+}
+
+
+h2 {
+font-weight: normal;
+font-size: 35px;
+line-height: 1;
+}
+
+h3 {
+	font-weight: normal;
+	font-size: 28px;
+	line-height: 1;
+}
+
+h4 {
+	font-family: 'Futura Bold';
+	
+	font-weight: normal;
+	font-size: 21px;
+	line-height: 1;
+}
+
+p {
+	margin-bottom: 1.5em;
+	margin-top: .5em;
+	
+}
+
+dfn, 
+cite, 
+em, 
+i {
+	font-style: italic;
+}
+
+blockquote {
+	margin: 0 1.5em;
+}
+
+address {
+	margin: 0 0 1.5em;
+}
+
+pre {
+	font-family: 'Courier 10 Pitch', Courier, monospace;
+	font-size: 15px;
+	font-size: .9375rem;
+	line-height: 1.6;
+	overflow: auto;
+	max-width: 100%;
+	margin-bottom: 1.6em;
+	padding: 1.6em;
+	background: #eee;
+}
+
+code, 
+kbd, 
+tt, 
+var {
+	font-family: Monaco, Consolas, 'Andale Mono', 'DejaVu Sans Mono', monospace;
+	font-size: 15px;
+	font-size: .9375rem;
+}
+
+abbr, 
+acronym {
+	cursor: help;
+	border-bottom: 1px dotted #666;
+}
+
+mark, 
+ins {
+	text-decoration: none;
+	background: #fff9c0;
+}
+
+
+html {
+	box-sizing: border-box;
+}
+
+*, 
+*:before, 
+*:after {
+	/* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+	box-sizing: inherit;
+}
+
+body {
+	background: #fff; /* Fallback for when there is no custom background color defined. */
+}
+
+blockquote:before, 
+blockquote:after, 
+q:before, 
+q:after {
+	content: '';
+}
+
+blockquote, 
+q {
+	quotes: '' '';
+}
+
+hr {
+	height: 1px;
+	margin-bottom: 1.5em;
+	border: 0;
+	background-color: #ccc;
+}
+
+/*ul, 
+ol {
+	margin: 0 0 1.5em;
+}*/
+
+/*ul li, 
+ol li {
+	margin-bottom: 1.5em;
+}*/
+
+/*ul {
+	list-style: disc;
+}*/
+
+ol {
+	list-style: decimal;
+}
+/*
+li > ul, 
+li > ol {
+	margin-bottom: 0;
+	margin-left: 1.5em;
+}*/
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin: 0 1.5em 1.5em;
+}
+
+img {
+	max-width: 100%; /* Adhere to container width. */
+	height: auto; /* Make sure images are scaled correctly. */
+}
+
+figure {
+	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
+}
+
+table {
+	width: 100%;
+	margin: 0 0 1.5em;
+}
+/*--------------------------------------------------------------
+# Forms
+--------------------------------------------------------------*/
+
+button, 
+input[type='button'], 
+input[type='reset'], 
+input[type='submit'] {
+	font-size: 12px;
+	font-size: .75rem;
+	line-height: 1;
+	padding: .6em 1em .4em;
+	color: rgba(0, 0, 0, .8);
+	border: 1px solid;
+	border-color: #ccc #ccc #bbb;
+	border-radius: 3px;
+	background: #e6e6e6;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 15px 17px rgba(255, 255, 255, .5), inset 0 -5px 12px rgba(0, 0, 0, .05);
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+button:hover, 
+input[type='button']:hover, 
+input[type='reset']:hover, 
+input[type='submit']:hover {
+	border-color: #ccc #bbb #aaa;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8), inset 0 15px 17px rgba(255, 255, 255, .8), inset 0 -5px 12px rgba(0, 0, 0, .02);
+}
+
+button:focus, 
+input[type='button']:focus, 
+input[type='reset']:focus, 
+input[type='submit']:focus, 
+button:active, 
+input[type='button']:active, 
+input[type='reset']:active, 
+input[type='submit']:active {
+	border-color: #aaa #bbb #bbb;
+	box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .5), inset 0 2px 5px rgba(0, 0, 0, .15);
+}
+
+input[type='text'], 
+input[type='email'], 
+input[type='url'], 
+input[type='password'], 
+input[type='search'], 
+input[type='number'], 
+input[type='tel'], 
+input[type='range'], 
+input[type='date'], 
+input[type='month'], 
+input[type='week'], 
+input[type='time'], 
+input[type='datetime'], 
+input[type='datetime-local'], 
+input[type='color'], 
+textarea {
+	padding: 3px;
+	color: #666;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+select {
+	border: 1px solid #ccc;
+}
+
+input[type='text']:focus, 
+input[type='email']:focus, 
+input[type='url']:focus, 
+input[type='password']:focus, 
+input[type='search']:focus, 
+input[type='number']:focus, 
+input[type='tel']:focus, 
+input[type='range']:focus, 
+input[type='date']:focus, 
+input[type='month']:focus, 
+input[type='week']:focus, 
+input[type='time']:focus, 
+input[type='datetime']:focus, 
+input[type='datetime-local']:focus, 
+input[type='color']:focus, 
+textarea:focus {
+	color: #111;
+}
+
+textarea {
+	width: 100%;
+}
+/*--------------------------------------------------------------
+# Navigation
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Links
+--------------------------------------------------------------*/
+
+a {
+	text-decoration: none;
+	color: #404086;
+}
+
+a:visited {
+	color: #404086;
+}
+
+a:hover, 
+a:focus, 
+a:active {
+	color: #404086;
+}
+
+a:focus {
+	outline: none;
+}
+
+a:hover, 
+a:active {
+	outline: 0;
+}
+.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 1.5em;
+}
+
+.alignright {
+	display: inline;
+	float: right;
+	margin-left: 1.5em;
+}
+
+.aligncenter {
+	display: block;
+	clear: both;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+embed, 
+iframe, 
+object {
+	max-width: 100%;
+}
+
+.wp-caption {
+	max-width: 100%;
+	margin-bottom: 1.5em;
+}
+
+.wp-caption img[class*='wp-image-'] {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.wp-caption .wp-caption-text {
+	margin: .8075em 0;
+}
+
+.wp-caption-text {
+	text-align: center;
+}
