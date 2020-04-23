@@ -1,6 +1,5 @@
 <?php
 
-
 require get_template_directory() . '/functions/post-type-events.php';
 
 function custom_post_type_archive_events($query) {
@@ -18,9 +17,6 @@ function custom_post_type_archive_events($query) {
 add_action('pre_get_posts', 'custom_post_type_archive_events', 9999);
 
 
-
-
-
 function register_my_menus() {
 	register_nav_menus(
 		array(
@@ -31,8 +27,8 @@ function register_my_menus() {
 add_action('init', 'register_my_menus');
 
 
-
 function gmlaunch_widgets_init() {
+	
 	register_sidebar(array(
 		'name' => esc_html__('Sidebar', 'gmlaunch'),
 		'id' => 'sidebar-1',
@@ -42,20 +38,112 @@ function gmlaunch_widgets_init() {
 		'before_title' => '<h2 class="widget-title">',
 		'after_title' => '</h2>',
 	));
+
+	register_sidebar(array(
+		'name' => esc_html__('Home Menu', 'gmlaunch'),
+		'id' => 'home-widget',
+		'description' => esc_html__('Add widgets here.', 'gmlaunch'),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">', 
+		'after_widget' => '</section>',
+		'before_title' => '<h2 class="widget-title">',
+		'after_title' => '</h2>',
+	));
+
 }
 add_action('widgets_init', 'gmlaunch_widgets_init');
+
+
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page();
+	
+}
+
+// Hide shipping rates when free shipping is available.
+add_filter('woocommerce_package_rates', 'hide_shipping_when_free_is_available', 10, 2);
+function hide_shipping_when_free_is_available($rates, $package) {
+	$free_yn = 0;
+	$pickup_yn = 0;
+	foreach($rates as $key => $value) {
+		$key_part = explode(":", $key);
+		$method_title = $key_part[0];
+
+		if ('local_pickup' == $method_title) {
+            // check if local pickup rate exists
+			$pickup_yn = 1;
+			$local_pickup = $rates[$key];
+			$pickup_key = $key;
+		}
+
+
+		if ('free_shipping' == $method_title) {
+            // check if free shipping rate exists
+			$free_yn = 1;
+			$free_shipping = $rates[$key];
+			$free_key = $key;
+		}
+	}
+
+
+	if ($free_yn == 1) {
+        // Unset all rates.
+		$rates = array();
+        // Restore free shipping rate.
+		$rates[$free_key] = $free_shipping;
+
+		if ($pickup_yn == 1) {
+        // Restore local pickup rate.
+			$rates[$pickup_key] = $local_pickup;
+
+		}
+
+
+		return $rates;
+	}
+	return $rates;
+}
+
+
+//Add Alphabetical sorting option to shop page / WC Product Settings
+// https://www.skyverge.com/blog/rename-add-woocommerce-product-sorting-options/
+function sv_alphabetical_woocommerce_shop_ordering( $sort_args ) {
+	$orderby_value = isset( $_GET['orderby'] ) ? woocommerce_clean( $_GET['orderby'] ) : apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
+	
+	if ( 'alphabetical' == $orderby_value ) {
+		$sort_args['orderby'] = 'title';
+		$sort_args['order'] = 'asc';
+		$sort_args['meta_key'] = '';
+	}
+	
+	return $sort_args;
+}
+add_filter( 'woocommerce_get_catalog_ordering_args', 'sv_alphabetical_woocommerce_shop_ordering' );
+
+
+function sv_custom_woocommerce_catalog_orderby( $sortby ) {
+	$sortby['alphabetical'] = 'Sort by name: alphabetical';
+	return $sortby;
+}
+add_filter( 'woocommerce_default_catalog_orderby_options', 'sv_custom_woocommerce_catalog_orderby' );
+add_filter( 'woocommerce_catalog_orderby', 'sv_custom_woocommerce_catalog_orderby' );
+
+
+
+
 
 
 
 function woocommerce_template_loop_product_link_open() {
 	global $product;
-
 	$link = apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product );
 	echo '<a href="' . esc_url( $link ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link border">';
 }
 
 
-
+// Move woocommerce_sidebar on Product Single from Bottom to Top of Page
+// We are using this to show a Widget which has "Sidebar Menu" - These are the top Level Categories
+remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+add_action('woocommerce_before_single_product', 'woocommerce_get_sidebar', 1);
 
 
 //Reposition Related Products.
@@ -80,58 +168,19 @@ function my_non_image_content_wrapper_end() {
 	echo '</div>'; 
 }
 
-
-
-
-
-
-
-// add_action('admin_menu', 'remove_admin_menu_links');
-// function remove_admin_menu_links(){
-// 	$user = wp_get_current_user();
-// 	if( $user && isset($user->user_email) && 'ivar@adtechsupply.com' == $user->user_email ) {
-// 		remove_menu_page('tools.php');
-// 		remove_menu_page('themes.php');
-// 		remove_menu_page('options-general.php');
-// 		remove_menu_page( 'jetpack' );
-// 		remove_menu_page('index.php');                             
-// 		remove_menu_page( 'edit.php' );
-// 		remove_menu_page('plugins.php');
-// 		remove_menu_page('users.php');
-// 		remove_menu_page('edit-comments.php');
-// 		remove_menu_page('page.php');
-// 		remove_menu_page('upload.php');
-// 		remove_menu_page( 'edit.php?post_type=page' ); 
-// 		remove_menu_page( 'edit.php?post_type=videos' );
-// 		remove_menu_page( 'edit.php?post_type=acf-field-group');
-// 	}
-// }
-
-// remove_theme_support( 'genesis-admin-menu' );
-
-
 function emelias_scripts() {
 	wp_enqueue_style('emelias-style', get_stylesheet_uri());
 	wp_enqueue_style('emelias-format', get_template_directory_uri() . '/css/format.css');
 	wp_enqueue_style('font-awesome5', get_stylesheet_directory_uri(). '/css/fontawesome/all-min.css');
 	wp_enqueue_style('woo-theme', get_template_directory_uri() . '/css/woo-theme.css');
-	
-	wp_enqueue_script('waypoints', get_template_directory_uri() . '/js/waypoints.js', array( 'jquery' ), '4.0.1', true ); 
-	wp_enqueue_script('waypoints-init', get_template_directory_uri() . '/js/waypoints-int.js',array( 'waypoints' ), '1.0.0', true );  
 	wp_enqueue_script('general-js', get_template_directory_uri() . '/js/index.js', array('jquery'), '', true);
 
 }
 add_action('wp_enqueue_scripts', 'emelias_scripts');
 
-
-
-// add_filter( 'post_class', 'prefix_post_class', 21 );
-// function prefix_post_class( $classes ) {
-// 	if ( 'product' == get_post_type() ) {
-// 		$classes = array_diff( $classes, array( 'first', 'last' ) );
-// 	}
-// 	return $classes;
-// }
+// Load Typekit fonts -
+// http://wptheming.com/2013/02/typekit-code-snippet/.
+require get_template_directory() . '/functions/typekit.php';
 
 
 // Adds option to GF to hide sublabels under fields
@@ -146,8 +195,6 @@ function mytheme_add_woocommerce_support() {
 	add_theme_support('woocommerce');
 }
 add_action('after_setup_theme', 'mytheme_add_woocommerce_support');
-
-
 
 
 
@@ -222,7 +269,7 @@ add_filter('gettext', 'my_text_strings', 20, 3);
 
 
 // Hide category product count in product archives
-add_filter('woocommerce_subcategory_count_html', '__return_false');
+// add_filter('woocommerce_subcategory_count_html', '__return_false');
 
 // Remove the sorting dropdown from Woocommerce
 remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
@@ -230,17 +277,18 @@ remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30
 // Remove the result count from WooCommerce
 remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
 
+
+
 // Enable Built in Woocommerce prodcut gallery
 // https://github.com/woocommerce/woocommerce/wiki/Enabling-product-gallery-features-(zoom,-swipe,-lightbox)
 // add_theme_support( 'wc-product-gallery-zoom' );
 add_theme_support( 'wc-product-gallery-lightbox' );
 add_theme_support( 'wc-product-gallery-slider' );
 
-/**
- * @snippet       WooCommerce Change Number of Related Products
- * @sourcecode    https://businessbloomer.com/?p=17473
- */
 
+
+// WooCommerce Change Number of Related Products
+// https://businessbloomer.com/?p=17473
 add_filter('woocommerce_output_related_products_args', 'bbloomer_change_number_related_products', 9999);
 
 function bbloomer_change_number_related_products($args) {
@@ -251,13 +299,7 @@ function bbloomer_change_number_related_products($args) {
 
 
 
-/**
- * Change price format from range to "From:"
- *
- * @param float $price
- * @param obj $product
- * @return str
- */
+// Change price format from range to "From:"
 function iconic_variable_price_format( $price, $product ) {
 	
 	$prefix = sprintf('%s: ', __('<span class="price-wrap"> from', 'iconic </span>'));
@@ -282,31 +324,7 @@ add_filter( 'woocommerce_variable_price_html', 'iconic_variable_price_format', 1
 
 
 
-/**
-* RETURNS MINIMUM PRICE AND HIDES MAXIMUM PRICE FOR VARIABLE PRODUCTS
-https://www.joshrobertnay.com/2018/01/show-starting-at-price-and-hiding-maximum-price-in-woocommerce/
-**/
-
-// add_filter( 'woocommerce_variable_sale_price_html', 'wc_wc20_variation_price_format', 10, 2 );
-// add_filter( 'woocommerce_variable_price_html', 'wc_wc20_variation_price_format', 10, 2 );
-// function wc_wc20_variation_price_format( $price, $product ) {
-// // Main Price
-// $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
-// $price = $prices[0] !== $prices[1] ? sprintf( __( 'Starting at %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-
-// // Sale Price
-// $prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
-// sort( $prices );
-// $saleprice = $prices[0] !== $prices[1] ? sprintf( __( 'Starting at %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-// if ( $price !== $saleprice ) {
-// $price = '' . $saleprice . ' ' . $price . '';
-// }
-// return $price;
-// }
-
-/*
-* change read more buttons for out of stock items to read contact us
-**/
+// Change read more buttons for out of stock items to read contact us
 if (!function_exists('woocommerce_template_loop_add_to_cart')) {
 	function woocommerce_template_loop_add_to_cart() {
 		global $product;
@@ -331,28 +349,6 @@ add_filter( 'woocommerce_product_add_to_cart_text', function( $text ) {
 }, 10 );
 
 
-
-
-
-
-
-// ===============================================================
-// Change the placeholder image
-// https://gist.github.com/woogists/cc3787e56446601ac5d14971b2e01a62#file-wc-change-placeholder-image-php
-
-add_filter('woocommerce_placeholder_img_src', 'custom_woocommerce_placeholder_img_src');
-
-function custom_woocommerce_placeholder_img_src( $src ) {
-	$upload_dir = wp_upload_dir();
-	$uploads = untrailingslashit( $upload_dir['baseurl'] );
-	// replace with path to your image
-	$src = $uploads . '/woocommerce_uploads/woo-placeholder.jpg';
-	
-	return $src;
-}
-
-
-
 // Remove Add to Cart Everywhere except on Single
 add_action( 'woocommerce_after_shop_loop_item', 'remove_add_to_cart_buttons', 1 );
 
@@ -363,20 +359,96 @@ function remove_add_to_cart_buttons() {
 }
 
 
+// Rename Dropdown from "Choose an Option"
+//https://cinchws.com/change-choose-an-option-variation-dropdown-label-in-woocommerce/
+add_filter( 'woocommerce_dropdown_variation_attribute_options_args', 'cinchws_filter_dropdown_args', 10 );
+
+function cinchws_filter_dropdown_args( $args ) {
+	$var_tax = get_taxonomy( $args['attribute'] );
+	$args['show_option_none'] = apply_filters( 'the_title', $var_tax->labels->name );
+	return $args;
+}
+
+
+
+
 // Support to hide products with settting of Catalog Visibility : Hidden. 
 // https://stackoverflow.com/questions/36522439/set-catalog-visibility-hidden-woo-commerce
-// update_post_meta( $product_id, '_visibility', '_visibility_hidden' );
+//update_post_meta( $product_id, '_visibility', '_visibility_hidden' );
 
 
-// function ec_mail_name( $email ){
-//   return 'Joe Doe'; // new email name from sender.
+
+// Change number of products that are displayed per page (shop page)
+add_filter( 'loop_shop_per_page', 'new_loop_shop_per_page', 20 );
+
+function new_loop_shop_per_page( $cols ) {
+  // $cols contains the current number of products per page based on the value stored on Options -> Reading
+  // Return the number of products you wanna show per page.
+	$cols = 24;
+	return $cols;
+}
+
+
+
+
+
+
+
+// add_filter( 'woocommerce_cart_shipping_method_full_label', 'remove_local_pickup_free_label', 10, 2 );
+// function remove_local_pickup_free_label($full_label, $method){
+// 	$full_label = str_replace("Local pickup","Dunedin Delivery",$full_label);
+// 	return $full_label;
 // }
-// add_filter( 'wp_mail_from_name', 'ec_mail_name' );
-
-// function ec_mail_from ($email ){
-//   return 'info@dkoenigart.com'; // new email address from sender.
-// }
-// add_filter( 'wp_mail_from', 'ec_mail_from' );
 
 
+
+
+
+
+add_filter('gettext', 'custom_strings_translation', 20, 3);
+
+function custom_strings_translation( $translated_text, $text, $domain ) {
+
+	switch ( $translated_text ) {
+		case 'Ship to a different address?' : 
+		$translated_text =  __( 'Shipping Address / Delivery Address', '__x__' ); 
+		break;
+	}
+
+	return $translated_text;
+}
+
+
+add_filter('gettext', 'custom_strings_translation2', 20, 3);
+
+function custom_strings_translation2( $translated_text, $text, $domain ) {
+	switch ( $translated_text ) {
+		case 'Billing details' : 
+		$translated_text =  __( 'Billing Address', '__x__' ); 
+		break;
+	}
+	return $translated_text;
+}
+
+
+
+add_action( 'woocommerce_before_cart_totals', 'bbloomer_notice_checkout' );
+
+function bbloomer_notice_checkout() {
+	echo '<p class="cart-notice"><strong>Dunedin Residents:<br></strong>We are offering Free Local Delivery for orders over $35';
+}
+
+
+add_action( 'woocommerce_before_cart_table', 'bbloomer_notice_cart' );
+
+function bbloomer_notice_cart() {
+	echo '<p class="cart-notice"><strong>Dunedin Residents:<br></strong>We are offering Free Local Delivery for orders over $35';
+}
+
+
+add_filter( 'woocommerce_shipping_package_name' , 'woocommerce_replace_text_shipping_to_delivery', 10, 3);
+
+function woocommerce_replace_text_shipping_to_delivery($package_name, $i, $package){
+	return sprintf( _nx( 'Delivery', 'Delivery %d', ( $i + 1 ), 'shipping packages', 'put-here-you-domain-i18n' ), ( $i + 1 ) );
+}
 
